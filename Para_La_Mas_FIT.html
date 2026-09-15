@@ -1,0 +1,972 @@
+<!doctype html>
+<html lang="es"><head><script>window["__codeletBootstrap__"]=JSON.parse('{"A":"A","B":"20260914-05-802a9e5","C":{"DM Sans":"YAD1aU3sLnI,0"}}');</script><script src="/_sdk/c21197326e9a1154.telemetry_sdk.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Guía de Entrenamiento</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.577.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #26343a;
+      --panel: #42606a;
+      --lime: #d6e3a6;
+      --line: rgba(255, 248, 239, 0.18);
+    }
+    * { box-sizing: border-box; }
+    html { background: #26343a; }
+    body {
+      width: 100%;
+      min-height: calc(100 * min(var(--vh, 1vh), 1vh));
+      margin: 0;
+      font-family: "DM Sans", sans-serif;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .app-shell {
+      width: 100%;
+      min-height: calc(100 * min(var(--vh, 1vh), 1vh));
+      max-width: 520px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+    .screen {
+      display: none;
+      min-height: calc(100 * min(var(--vh, 1vh), 1vh));
+      position: relative;
+      z-index: 1;
+      padding: 28px 22px 32px;
+      animation: enter .42s cubic-bezier(.2,.8,.2,1) both;
+      flex-direction: column;
+    }
+    .screen.active { display: flex; }
+    @keyframes enter {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .primary-button, .menu-image-card, .exercise-card, .back-button {
+      transition: transform .2s ease, filter .2s ease;
+    }
+    .primary-button:hover, .menu-image-card:hover, .exercise-card:hover, .back-button:hover {
+      transform: translateY(-3px);
+      filter: brightness(1.04);
+    }
+    .menu-image-card {
+      width: 100%;
+      border: 1.5px solid var(--lime);
+      border-radius: 20px;
+      overflow: hidden;
+      background: #34484e;
+      box-shadow: 0 14px 30px rgba(0,0,0,.24);
+      cursor: pointer;
+      display: block;
+      padding: 0;
+      aspect-ratio: 4 / 3;
+    }
+    .menu-image-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .exercise-card {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #42606a;
+      border-radius: 22px;
+      padding: 16px 20px;
+      color: #fff8f3;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 14px 30px rgba(0,0,0,.16);
+      cursor: pointer;
+    }
+    .exercise-card.completed {
+      border-color: var(--lime);
+      background: #324a52;
+      opacity: 0.85;
+    }
+    .exercise-card.completed h3 {
+      text-decoration: line-through;
+      color: var(--lime);
+    }
+    .check-box {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      border: 2px solid var(--lime);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .exercise-card.completed .check-box {
+      background: var(--lime);
+      color: #111511;
+    }
+    .menu-arrow { margin-left: auto; color: var(--lime); }
+    .exercise-meta {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 4px 10px;
+      margin-top: 4px;
+      background: rgba(214,227,166,.16);
+      color: var(--lime);
+      font-size: .76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .back-button {
+      border: 1px solid rgba(214,227,166,.62);
+      background: transparent;
+      color: var(--lime);
+      border-radius: 15px;
+      min-height: 48px;
+      padding: 12px 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      width: 100%;
+      font-weight: 700;
+    }
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #000;
+      margin: 10px 0 16px;
+    }
+    .video-container-vertical {
+      position: relative;
+      padding-bottom: 177.77%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #000;
+      margin: 10px 0 16px;
+    }
+    .video-container iframe, .video-container video,
+    .video-container-vertical iframe, .video-container-vertical video {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%; border: 0; object-fit: contain;
+    }
+    .divider-tag {
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: var(--lime);
+      margin: 14px 0 6px;
+      text-transform: uppercase;
+    }
+    /* Estilos Barra de Progreso */
+    .progress-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--lime);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    /* Modal Felicitación */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 99;
+      padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-box {
+      background: #34484e;
+      border: 2px solid var(--lime);
+      border-radius: 24px;
+      padding: 24px;
+      text-align: center;
+      max-width: 360px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      animation: enter 0.3s ease;
+    }
+  </style>
+ </head>
+ <body>
+  <div class="app-shell">
+   
+   <!-- PORTADA REDISEÑADA PERSONALIZADA -->
+   <section id="cover" class="screen active justify-between">
+    <header>
+     <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">ENTRENA CON PROPÓSITO</p>
+    </header>
+    <main class="flex flex-col items-center text-center my-auto py-2">
+     <h1 class="text-3xl font-extrabold text-[#f7f8f2] leading-tight mb-3">
+      ¡Vamos, Jennifer,<br>tu fuerza no tiene límites!
+     </h1>
+     
+     <div class="w-64 h-64 my-2 flex items-center justify-center">
+      <img src="https://raw.githubusercontent.com/Yei9311/GYM_JENN/main/JENN.png" alt="Jennifer Avatar" class="max-w-full max-h-full object-contain drop-shadow-2xl">
+     </div>
+
+     <p class="mt-3 max-w-xs text-sm text-[#f7f8f2] opacity-90">La constancia convierte el esfuerzo de hoy en tu fuerza de mañana.</p>
+    </main>
+    <footer>
+     <button id="start-button" type="button" class="primary-button w-full rounded-2xl bg-[#d6ff37] px-5 py-4 font-bold text-[#111511] shadow-lg">EMPEZAR RUTINA</button>
+    </footer>
+   </section>
+
+   <!-- MENÚ PRINCIPAL -->
+   <section id="menu" class="screen">
+    <header class="mb-6">
+     <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">PLAN DE 3 DÍAS</p>
+     <h2 class="mt-2 font-extrabold text-[#f7f8f2] text-2xl">Elige tu día</h2>
+    </header>
+    <main class="flex-1 space-y-4">
+     <button type="button" class="menu-image-card" data-target="day-gluteo">
+      <img src="https://raw.githubusercontent.com/Yei9311/GYM_JENN/main/GLUTEO.png" alt="Día de Glúteo">
+     </button>
+
+     <button type="button" class="menu-image-card" data-target="day-pierna">
+      <img src="https://raw.githubusercontent.com/Yei9311/GYM_JENN/main/PIERNA.png" alt="Día de Pierna">
+     </button>
+
+     <button type="button" class="menu-image-card" data-target="day-superior">
+      <img src="https://raw.githubusercontent.com/Yei9311/GYM_JENN/main/SUPERIOR.png" alt="Tren Superior">
+     </button>
+    </main>
+   </section>
+
+   <!-- ==================== DÍA DE GLÚTEO ==================== -->
+   <section id="day-gluteo" class="screen" data-day="gluteo">
+    <header class="pb-4">
+     <div class="flex justify-between items-center">
+      <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">DÍA 01</p>
+      <span class="progress-text text-xs font-bold text-[#d6ff37]">0/5 (0%)</span>
+     </div>
+     <h2 class="mt-1 font-extrabold text-[#f7f8f2] text-2xl">Día de Glúteo</h2>
+     <div class="progress-bar-bg"><div class="progress-bar-fill"></div></div>
+    </header>
+    <main class="flex-1 space-y-3">
+     <div class="exercise-card" data-ex-id="g-talon" data-target="ex-g-talon">
+      <div class="check-box" onclick="toggleCheck(event, 'g-talon')"><i data-lucide="check" class="w-4 h-4 hidden"></i></div>
+      <div class="flex-1">
+       <h3 class="font-bold text-[#f7f8f2] text-base">Elevación de Talón</h3>
+       <span class="exercise-meta">3 series × 12–15 reps</span>
+      </div>
+      <i class="menu-arrow" data-lucide="chevron-right"></i>
+     </div>
+
+     <div class="exercise-card" data-ex-id="g-hipthrust" data-target="ex-g-hipthrust">
+      <div class="check-box" onclick="toggleCheck(event, 'g-hipthrust')"><i data-lucide="check" class="w-4 h-4 hidden"></i></div>
+      <div class="flex-1">
+       <h3 class="font-bold text-[#f7f8f2] text-base">Hip Thrust</h3>
+       <span class="exercise-meta">4 series × 10–12 reps</span>
+      </div>
+      <i class="menu-arrow" data-lucide="chevron-right"></i>
+     </div>
+
+     <div class="exercise-card" data-ex-id="g-adductor" data-target="ex-g-adductor">
+      <div class="check-box" onclick="toggleCheck(event, 'g-adductor')"><i data-lucide="check" class="w-4 h-4 hidden"></i></div>
+      <div class="flex-1">
+       <h3 class="font-bold text-[#f7f8f2] text-base">Aductor y Abductor</h3>
+       <span class="exercise-meta">3 series × 12–15 reps</span>
+      </div>
+      <i class="menu-arrow" data-lucide="chevron-right"></i>
+     </div>
+
+     <div class="exercise-card" data-ex-id="g-bulgara" data-target="ex-g-bulgara">
+      <div class="check-box" onclick="toggleCheck(event, 'g-bulgara')"><i data-lucide="check" class="w-4 h-4 hidden"></i></div>
+      <div class="flex-1">
+       <h3 class="font-bold text-[#f7f8f2] text-base">Sentadilla Búlgara</h3>
+       <span class="exercise-meta">3 series × 10 reps/lado</span>
+      </div>
+      <i class="menu-arrow" data-lucide="chevron-right"></i>
+     </div>
+
+     <div class="exercise-card" data-ex-id="g-patada" data-target="ex-g-patada">
+      <div class="check-box" onclick="toggleCheck(event, 'g-patada')"><i data-lucide="check" class="w-4 h-4 hidden"></i></div>
+      <div class="flex-1">
+       <h3 class="font-bold text-[#f7f8f2] text-base">Patada de Glúteo</h3>
+       <span class="exercise-meta">3 series × 12 reps/lado</span>
+      </div>
+      <i class="menu-arrow" data-lucide="chevron-right"></i>
+     </div>
+    </main>
+    <footer class="pt-4">
+     <button type="button" class="back-button back-to-menu"><i data-lucide="arrow-left"></i> VOLVER AL MENÚ</button>
+    </footer>
+   </section>
+
+   <!-- DETALLES GLÚTEO -->
+   <section id="ex-g-talon" class="screen">
+    <header class="pb-2">
+     <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">GLÚTEO</p>
+     <h2 class="mt-1 font-extrabold text-[#f7f8f2] text-2xl">Elevación de Talón</h2>
+     <span class="exercise-meta">3 series × 12–15 reps</span>
+    </header>
+    <main class="flex-1">
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Elevación de Talón Sentado</h4>
+     <div class="video-container">
+      <video autoplay loop muted playsinline webkit-playsinline preload="auto">
+       <source src="https://api.smartworkout.app/asset/video/162f4ec1-4427-40b4-b330-c0ea48733bd4.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="divider-tag">— O / ALTERNATIVA —</div>
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Elevación de Talón de Pie</h4>
+     <div class="video-container">
+      <video autoplay loop muted playsinline webkit-playsinline preload="auto">
+       <source src="https://api.smartworkout.app/asset/video/e760851c-8843-42df-ab2f-0bc433ed2758.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="bg-[#34484e] p-4 rounded-xl text-[#b7c0b4] text-sm leading-relaxed space-y-2 mt-4">
+      <p class="font-bold text-[#f7f8f2]">Claves del ejercicio:</p>
+      <p>1. Sube lento apretando pantorrillas arriba.</p>
+      <p>2. Evita rebotar en el suelo.</p>
+      <p>3. Mantén el abdomen firme para no perder el equilibrio.</p>
+     </div>
+    </main>
+    <footer class="pt-4"><button type="button" class="back-button nav-back" data-back="day-gluteo"><i data-lucide="arrow-left"></i> VOLVER A GLÚTEO</button></footer>
+   </section>
+
+   <section id="ex-g-hipthrust" class="screen">
+    <header class="pb-2">
+     <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">GLÚTEO</p>
+     <h2 class="mt-1 font-extrabold text-[#f7f8f2] text-2xl">Hip Thrust</h2>
+     <span class="exercise-meta">4 series × 10–12 reps</span>
+    </header>
+    <main class="flex-1">
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Hip Thrust en Barra</h4>
+     <div class="video-container-vertical">
+      <video loop controls playsinline webkit-playsinline preload="auto">
+       <source src="https://raw.githubusercontent.com/Yei9311/GYM_JENN/main/HIPTHRUST_BARRA.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="divider-tag">— O / ALTERNATIVA —</div>
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Hip Thrust en Máquina</h4>
+     <div class="video-container">
+      <video autoplay loop muted playsinline webkit-playsinline preload="auto">
+       <source src="https://api.smartworkout.app/asset/video/a4fd5689-0e83-4c76-86a5-6210d445ccea.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="bg-[#34484e] p-4 rounded-xl text-[#b7c0b4] text-sm leading-relaxed space-y-2 mt-4">
+      <p class="font-bold text-[#f7f8f2]">Claves del ejercicio:</p>
+      <p>1. Apoya la espalda en el banco y baja controlado.</p>
+      <p>2. Empuja con los talones apretando los glúteos arriba.</p>
+      <p>3. Mantén la barbilla pegada al pecho.</p>
+     </div>
+    </main>
+    <footer class="pt-4"><button type="button" class="back-button nav-back" data-back="day-gluteo"><i data-lucide="arrow-left"></i> VOLVER A GLÚTEO</button></footer>
+   </section>
+
+   <section id="ex-g-adductor" class="screen">
+    <header class="pb-2">
+     <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">GLÚTEO</p>
+     <h2 class="mt-1 font-extrabold text-[#f7f8f2] text-2xl">Aductor y Abductor</h2>
+     <span class="exercise-meta">3 series × 12–15 reps</span>
+    </header>
+    <main class="flex-1">
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Aductor</h4>
+     <div class="video-container">
+      <video autoplay loop muted playsinline webkit-playsinline preload="auto">
+       <source src="https://api.smartworkout.app/asset/video/a4b1cb57-543c-4cbc-880a-8277129d06b7.mp4" type="video/mp4">
+      </video>
+     </div>
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Abductor</h4>
+     <div class="video-container">
+      <video autoplay loop muted playsinline webkit-playsinline preload="auto">
+       <source src="https://api.smartworkout.app/asset/video/c62558bf-df0f-4f89-b476-7003a5bfabc6.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="bg-[#34484e] p-4 rounded-xl text-[#b7c0b4] text-sm leading-relaxed space-y-2 mt-4">
+      <p class="font-bold text-[#f7f8f2]">Claves del ejercicio:</p>
+      <p>1. Abre y cierra controlado, sintiendo el músculo.</p>
+      <p>2. No uses impulso con el torso.</p>
+      <p>3. Controla la velocidad en ambos movimientos.</p>
+     </div>
+    </main>
+    <footer class="pt-4"><button type="button" class="back-button nav-back" data-back="day-gluteo"><i data-lucide="arrow-left"></i> VOLVER A GLÚTEO</button></footer>
+   </section>
+
+   <section id="ex-g-bulgara" class="screen">
+    <header class="pb-2">
+     <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">GLÚTEO</p>
+     <h2 class="mt-1 font-extrabold text-[#f7f8f2] text-2xl">Sentadilla Búlgara</h2>
+     <span class="exercise-meta">3 series × 10 reps/lado</span>
+    </header>
+    <main class="flex-1">
+     <div class="video-container-vertical">
+      <video loop controls playsinline webkit-playsinline preload="auto">
+       <source src="https://raw.githubusercontent.com/Yei9311/GYM_JENN/main/BULGARA.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="bg-[#34484e] p-4 rounded-xl text-[#b7c0b4] text-sm leading-relaxed space-y-2">
+      <p class="font-bold text-[#f7f8f2]">Claves del ejercicio:</p>
+      <p>1. Apoya un pie atrás y baja controlado.</p>
+      <p>2. Mantén el pecho erguido.</p>
+      <p>3. Empuja con el talón de la pierna delantera.</p>
+     </div>
+    </main>
+    <footer class="pt-4"><button type="button" class="back-button nav-back" data-back="day-gluteo"><i data-lucide="arrow-left"></i> VOLVER A GLÚTEO</button></footer>
+   </section>
+
+   <section id="ex-g-patada" class="screen">
+    <header class="pb-2">
+     <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">GLÚTEO</p>
+     <h2 class="mt-1 font-extrabold text-[#f7f8f2] text-2xl">Patada de Glúteo</h2>
+     <span class="exercise-meta">3 series × 12 reps/lado</span>
+    </header>
+    <main class="flex-1">
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Patada en Polea</h4>
+     <div class="video-container-vertical">
+      <video loop controls playsinline webkit-playsinline preload="auto">
+       <source src="https://raw.githubusercontent.com/Yei9311/GYM_JENN/main/PATADA_POLEA.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="divider-tag">— O / ALTERNATIVA —</div>
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Patada en Máquina</h4>
+     <div class="video-container">
+      <video autoplay loop muted playsinline webkit-playsinline preload="auto">
+       <source src="https://api.smartworkout.app/asset/video/efd17fd3-ef95-43c1-8eb7-7b10975766f3.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="bg-[#34484e] p-4 rounded-xl text-[#b7c0b4] text-sm leading-relaxed space-y-2 mt-4">
+      <p class="font-bold text-[#f7f8f2]">Claves del ejercicio:</p>
+      <p>1. Patada suave atrás apretando el glúteo.</p>
+      <p>2. Evita arquear la zona lumbar.</p>
+      <p>3. Mantén la rodilla en posición fija.</p>
+     </div>
+    </main>
+    <footer class="pt-4"><button type="button" class="back-button nav-back" data-back="day-gluteo"><i data-lucide="arrow-left"></i> VOLVER A GLÚTEO</button></footer>
+   </section>
+
+   <!-- ==================== DÍA DE PIERNA ==================== -->
+   <section id="day-pierna" class="screen" data-day="pierna">
+    <header class="pb-4">
+     <div class="flex justify-between items-center">
+      <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">DÍA 02</p>
+      <span class="progress-text text-xs font-bold text-[#d6ff37]">0/5 (0%)</span>
+     </div>
+     <h2 class="mt-1 font-extrabold text-[#f7f8f2] text-2xl">Día de Pierna</h2>
+     <div class="progress-bar-bg"><div class="progress-bar-fill"></div></div>
+    </header>
+    <main class="flex-1 space-y-3">
+     <div class="exercise-card" data-ex-id="p-talon" data-target="ex-p-talon">
+      <div class="check-box" onclick="toggleCheck(event, 'p-talon')"><i data-lucide="check" class="w-4 h-4 hidden"></i></div>
+      <div class="flex-1">
+       <h3 class="font-bold text-[#f7f8f2] text-base">Elevación de Talón</h3>
+       <span class="exercise-meta">3 series × 12–15 reps</span>
+      </div>
+      <i class="menu-arrow" data-lucide="chevron-right"></i>
+     </div>
+
+     <div class="exercise-card" data-ex-id="p-cuadriceps" data-target="ex-p-cuadriceps">
+      <div class="check-box" onclick="toggleCheck(event, 'p-cuadriceps')"><i data-lucide="check" class="w-4 h-4 hidden"></i></div>
+      <div class="flex-1">
+       <h3 class="font-bold text-[#f7f8f2] text-base">Extensión de Cuádriceps</h3>
+       <span class="exercise-meta">3 series × 10–12 reps</span>
+      </div>
+      <i class="menu-arrow" data-lucide="chevron-right"></i>
+     </div>
+
+     <div class="exercise-card" data-ex-id="p-femoral" data-target="ex-p-femoral">
+      <div class="check-box" onclick="toggleCheck(event, 'p-femoral')"><i data-lucide="check" class="w-4 h-4 hidden"></i></div>
+      <div class="flex-1">
+       <h3 class="font-bold text-[#f7f8f2] text-base">Curl de Femoral</h3>
+       <span class="exercise-meta">3 series × 10–12 reps</span>
+      </div>
+      <i class="menu-arrow" data-lucide="chevron-right"></i>
+     </div>
+
+     <div class="exercise-card" data-ex-id="p-adductor" data-target="ex-p-adductor">
+      <div class="check-box" onclick="toggleCheck(event, 'p-adductor')"><i data-lucide="check" class="w-4 h-4 hidden"></i></div>
+      <div class="flex-1">
+       <h3 class="font-bold text-[#f7f8f2] text-base">Aductor y Abductor</h3>
+       <span class="exercise-meta">3 series × 12–15 reps</span>
+      </div>
+      <i class="menu-arrow" data-lucide="chevron-right"></i>
+     </div>
+
+     <div class="exercise-card" data-ex-id="p-hack" data-target="ex-p-hack">
+      <div class="check-box" onclick="toggleCheck(event, 'p-hack')"><i data-lucide="check" class="w-4 h-4 hidden"></i></div>
+      <div class="flex-1">
+       <h3 class="font-bold text-[#f7f8f2] text-base">Sentadilla Hack</h3>
+       <span class="exercise-meta">4 series × 10 reps</span>
+      </div>
+      <i class="menu-arrow" data-lucide="chevron-right"></i>
+     </div>
+    </main>
+    <footer class="pt-4">
+     <button type="button" class="back-button back-to-menu"><i data-lucide="arrow-left"></i> VOLVER AL MENÚ</button>
+    </footer>
+   </section>
+
+   <!-- DETALLES PIERNA -->
+   <section id="ex-p-talon" class="screen">
+    <header class="pb-2">
+     <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">PIERNA</p>
+     <h2 class="mt-1 font-extrabold text-[#f7f8f2] text-2xl">Elevación de Talón</h2>
+     <span class="exercise-meta">3 series × 12–15 reps</span>
+    </header>
+    <main class="flex-1">
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Elevación de Talón Sentado</h4>
+     <div class="video-container">
+      <video autoplay loop muted playsinline webkit-playsinline preload="auto">
+       <source src="https://api.smartworkout.app/asset/video/162f4ec1-4427-40b4-b330-c0ea48733bd4.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="divider-tag">— O / ALTERNATIVA —</div>
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Elevación de Talón de Pie</h4>
+     <div class="video-container">
+      <video autoplay loop muted playsinline webkit-playsinline preload="auto">
+       <source src="https://api.smartworkout.app/asset/video/e760851c-8843-42df-ab2f-0bc433ed2758.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="bg-[#34484e] p-4 rounded-xl text-[#b7c0b4] text-sm leading-relaxed space-y-2 mt-4">
+      <p class="font-bold text-[#f7f8f2]">Claves del ejercicio:</p>
+      <p>1. Sube lento apretando arriba.</p>
+      <p>2. Evita usar impulso.</p>
+      <p>3. Mantén el control en todo el recorrido.</p>
+     </div>
+    </main>
+    <footer class="pt-4"><button type="button" class="back-button nav-back" data-back="day-pierna"><i data-lucide="arrow-left"></i> VOLVER A PIERNA</button></footer>
+   </section>
+
+   <section id="ex-p-cuadriceps" class="screen">
+    <header class="pb-2">
+     <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">PIERNA</p>
+     <h2 class="mt-1 font-extrabold text-[#f7f8f2] text-2xl">Extensión de Cuádriceps</h2>
+     <span class="exercise-meta">3 series × 10–12 reps</span>
+    </header>
+    <main class="flex-1">
+     <div class="video-container">
+      <video autoplay loop muted playsinline webkit-playsinline preload="auto">
+       <source src="https://api.smartworkout.app/asset/video/10ec53eb-72f0-4335-b81c-8302db893bed.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="bg-[#34484e] p-4 rounded-xl text-[#b7c0b4] text-sm leading-relaxed space-y-2">
+      <p class="font-bold text-[#f7f8f2]">Claves del ejercicio:</p>
+      <p>1. Siéntate con la espalda recta.</p>
+      <p>2. Extiende las piernas sin bloquear las rodillas.</p>
+      <p>3. Regresa lento al inicio.</p>
+     </div>
+    </main>
+    <footer class="pt-4"><button type="button" class="back-button nav-back" data-back="day-pierna"><i data-lucide="arrow-left"></i> VOLVER A PIERNA</button></footer>
+   </section>
+
+   <section id="ex-p-femoral" class="screen">
+    <header class="pb-2">
+     <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">PIERNA</p>
+     <h2 class="mt-1 font-extrabold text-[#f7f8f2] text-2xl">Curl de Femoral</h2>
+     <span class="exercise-meta">3 series × 10–12 reps</span>
+    </header>
+    <main class="flex-1">
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Curl de Femoral Sentado</h4>
+     <div class="video-container">
+      <video autoplay loop muted playsinline webkit-playsinline preload="auto">
+       <source src="https://api.smartworkout.app/asset/video/1b19271e-8604-46d5-94a5-6e1fb99b125b.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="divider-tag">— O / ALTERNATIVA —</div>
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Curl de Femoral Acostado</h4>
+     <div class="video-container">
+      <video autoplay loop muted playsinline webkit-playsinline preload="auto">
+       <source src="https://api.smartworkout.app/asset/video/313e2366-3d66-41d3-b450-5b5b9664e6da.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="bg-[#34484e] p-4 rounded-xl text-[#b7c0b4] text-sm leading-relaxed space-y-2 mt-4">
+      <p class="font-bold text-[#f7f8f2]">Claves del ejercicio:</p>
+      <p>1. Alinea tus rodillas con el eje de la máquina.</p>
+      <p>2. Empuja la almohadilla con los talones.</p>
+      <p>3. Haz el movimiento controlado.</p>
+     </div>
+    </main>
+    <footer class="pt-4"><button type="button" class="back-button nav-back" data-back="day-pierna"><i data-lucide="arrow-left"></i> VOLVER A PIERNA</button></footer>
+   </section>
+
+   <section id="ex-p-adductor" class="screen">
+    <header class="pb-2">
+     <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">PIERNA</p>
+     <h2 class="mt-1 font-extrabold text-[#f7f8f2] text-2xl">Aductor y Abductor</h2>
+     <span class="exercise-meta">3 series × 12–15 reps</span>
+    </header>
+    <main class="flex-1">
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Aductor</h4>
+     <div class="video-container">
+      <video autoplay loop muted playsinline webkit-playsinline preload="auto">
+       <source src="https://api.smartworkout.app/asset/video/a4b1cb57-543c-4cbc-880a-8277129d06b7.mp4" type="video/mp4">
+      </video>
+     </div>
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Abductor</h4>
+     <div class="video-container">
+      <video autoplay loop muted playsinline webkit-playsinline preload="auto">
+       <source src="https://api.smartworkout.app/asset/video/c62558bf-df0f-4f89-b476-7003a5bfabc6.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="bg-[#34484e] p-4 rounded-xl text-[#b7c0b4] text-sm leading-relaxed space-y-2 mt-4">
+      <p class="font-bold text-[#f7f8f2]">Claves del ejercicio:</p>
+      <p>1. Abre y cierra controlado.</p>
+      <p>2. Evita usar impulso.</p>
+      <p>3. Mantén el torso estable.</p>
+     </div>
+    </main>
+    <footer class="pt-4"><button type="button" class="back-button nav-back" data-back="day-pierna"><i data-lucide="arrow-left"></i> VOLVER A PIERNA</button></footer>
+   </section>
+
+   <section id="ex-p-hack" class="screen">
+    <header class="pb-2">
+     <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">PIERNA</p>
+     <h2 class="mt-1 font-extrabold text-[#f7f8f2] text-2xl">Sentadilla Hack</h2>
+     <span class="exercise-meta">4 series × 10 reps</span>
+    </header>
+    <main class="flex-1">
+     <div class="video-container">
+      <video loop controls playsinline webkit-playsinline preload="auto">
+       <source src="https://raw.githubusercontent.com/Yei9311/GYM_JENN/main/HACK.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="bg-[#34484e] p-4 rounded-xl text-[#b7c0b4] text-sm leading-relaxed space-y-2">
+      <p class="font-bold text-[#f7f8f2]">Claves del ejercicio:</p>
+      <p>1. Coloca los pies al ancho de los hombros.</p>
+      <p>2. Baja controlado sin levantar los talones.</p>
+      <p>3. Empuja con fuerza para subir.</p>
+     </div>
+    </main>
+    <footer class="pt-4"><button type="button" class="back-button nav-back" data-back="day-pierna"><i data-lucide="arrow-left"></i> VOLVER A PIERNA</button></footer>
+   </section>
+
+   <!-- ==================== TREN SUPERIOR ==================== -->
+   <section id="day-superior" class="screen" data-day="superior">
+    <header class="pb-4">
+     <div class="flex justify-between items-center">
+      <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">DÍA 03</p>
+      <span class="progress-text text-xs font-bold text-[#d6ff37]">0/5 (0%)</span>
+     </div>
+     <h2 class="mt-1 font-extrabold text-[#f7f8f2] text-2xl">Tren Superior</h2>
+     <div class="progress-bar-bg"><div class="progress-bar-fill"></div></div>
+    </header>
+    <main class="flex-1 space-y-3">
+     <div class="exercise-card" data-ex-id="s-presspecho" data-target="ex-s-presspecho">
+      <div class="check-box" onclick="toggleCheck(event, 's-presspecho')"><i data-lucide="check" class="w-4 h-4 hidden"></i></div>
+      <div class="flex-1">
+       <h3 class="font-bold text-[#f7f8f2] text-base">Press de Pecho</h3>
+       <span class="exercise-meta">3 series × 10–12 reps</span>
+      </div>
+      <i class="menu-arrow" data-lucide="chevron-right"></i>
+     </div>
+
+     <div class="exercise-card" data-ex-id="s-remo" data-target="ex-s-remo">
+      <div class="check-box" onclick="toggleCheck(event, 's-remo')"><i data-lucide="check" class="w-4 h-4 hidden"></i></div>
+      <div class="flex-1">
+       <h3 class="font-bold text-[#f7f8f2] text-base">Remo</h3>
+       <span class="exercise-meta">3 series × 10–12 reps</span>
+      </div>
+      <i class="menu-arrow" data-lucide="chevron-right"></i>
+     </div>
+
+     <div class="exercise-card" data-ex-id="s-hombros" data-target="ex-s-hombros">
+      <div class="check-box" onclick="toggleCheck(event, 's-hombros')"><i data-lucide="check" class="w-4 h-4 hidden"></i></div>
+      <div class="flex-1">
+       <h3 class="font-bold text-[#f7f8f2] text-base">Press de Hombros</h3>
+       <span class="exercise-meta">3 series × 8–10 reps</span>
+      </div>
+      <i class="menu-arrow" data-lucide="chevron-right"></i>
+     </div>
+
+     <div class="exercise-card" data-ex-id="s-biceps" data-target="ex-s-biceps">
+      <div class="check-box" onclick="toggleCheck(event, 's-biceps')"><i data-lucide="check" class="w-4 h-4 hidden"></i></div>
+      <div class="flex-1">
+       <h3 class="font-bold text-[#f7f8f2] text-base">Curl de Bíceps</h3>
+       <span class="exercise-meta">3 series × 12 reps</span>
+      </div>
+      <i class="menu-arrow" data-lucide="chevron-right"></i>
+     </div>
+
+     <div class="exercise-card" data-ex-id="s-triceps" data-target="ex-s-triceps">
+      <div class="check-box" onclick="toggleCheck(event, 's-triceps')"><i data-lucide="check" class="w-4 h-4 hidden"></i></div>
+      <div class="flex-1">
+       <h3 class="font-bold text-[#f7f8f2] text-base">Extensión de Tríceps en Polea</h3>
+       <span class="exercise-meta">3 series × 12 reps</span>
+      </div>
+      <i class="menu-arrow" data-lucide="chevron-right"></i>
+     </div>
+    </main>
+    <footer class="pt-4">
+     <button type="button" class="back-button back-to-menu"><i data-lucide="arrow-left"></i> VOLVER AL MENÚ</button>
+    </footer>
+   </section>
+
+   <!-- DETALLES TREN SUPERIOR -->
+   <section id="ex-s-presspecho" class="screen">
+    <header class="pb-2">
+     <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">TREN SUPERIOR</p>
+     <h2 class="mt-1 font-extrabold text-[#f7f8f2] text-2xl">Press de Pecho</h2>
+     <span class="exercise-meta">3 series × 10–12 reps</span>
+    </header>
+    <main class="flex-1">
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Press Plano con Mancuernas</h4>
+     <div class="video-container">
+      <video loop controls playsinline webkit-playsinline preload="auto">
+       <source src="https://raw.githubusercontent.com/Yei9311/GYM_JENN/main/PRESS_MANCUERNA.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="divider-tag">— O / ALTERNATIVA —</div>
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Press Plano en Máquina</h4>
+     <div class="video-container-vertical">
+      <video loop controls playsinline webkit-playsinline preload="auto">
+       <source src="https://raw.githubusercontent.com/Yei9311/GYM_JENN/main/PRESS_MAQUINA.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="bg-[#34484e] p-4 rounded-xl text-[#b7c0b4] text-sm leading-relaxed space-y-2 mt-4">
+      <p class="font-bold text-[#f7f8f2]">Claves del ejercicio:</p>
+      <p>1. Apoya bien la espalda y ajusta la altura del asiento.</p>
+      <p>2. Empuja controlado sin despegar los hombros.</p>
+      <p>3. Regresa lento al inicio.</p>
+     </div>
+    </main>
+    <footer class="pt-4"><button type="button" class="back-button nav-back" data-back="day-superior"><i data-lucide="arrow-left"></i> VOLVER A TREN SUPERIOR</button></footer>
+   </section>
+
+   <section id="ex-s-remo" class="screen">
+    <header class="pb-2">
+     <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">TREN SUPERIOR</p>
+     <h2 class="mt-1 font-extrabold text-[#f7f8f2] text-2xl">Remo</h2>
+     <span class="exercise-meta">3 series × 10–12 reps</span>
+    </header>
+    <main class="flex-1">
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Remo en Polea</h4>
+     <div class="video-container">
+      <video loop controls playsinline webkit-playsinline preload="auto">
+       <source src="https://raw.githubusercontent.com/Yei9311/GYM_JENN/main/REMO_POLEA.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="divider-tag">— O / ALTERNATIVA —</div>
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Remo en Máquina</h4>
+     <div class="video-container">
+      <video loop controls playsinline webkit-playsinline preload="auto">
+       <source src="https://raw.githubusercontent.com/Yei9311/GYM_JENN/main/REMO_MAQUINA.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="bg-[#34484e] p-4 rounded-xl text-[#b7c0b4] text-sm leading-relaxed space-y-2 mt-4">
+      <p class="font-bold text-[#f7f8f2]">Claves del ejercicio:</p>
+      <p>1. Siéntate con el pecho apoyado en el cojín.</p>
+      <p>2. Tira hacia ti apretando la espalda.</p>
+      <p>3. Estira los brazos controlado sin balancear el cuerpo.</p>
+     </div>
+    </main>
+    <footer class="pt-4"><button type="button" class="back-button nav-back" data-back="day-superior"><i data-lucide="arrow-left"></i> VOLVER A TREN SUPERIOR</button></footer>
+   </section>
+
+   <section id="ex-s-hombros" class="screen">
+    <header class="pb-2">
+     <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">TREN SUPERIOR</p>
+     <h2 class="mt-1 font-extrabold text-[#f7f8f2] text-2xl">Press de Hombros</h2>
+     <span class="exercise-meta">3 series × 8–10 reps</span>
+    </header>
+    <main class="flex-1">
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Press de Hombro con Mancuerna</h4>
+     <div class="video-container">
+      <video autoplay loop muted playsinline webkit-playsinline preload="auto">
+       <source src="https://api.smartworkout.app/asset/video/4b524c2d-e6f6-4f01-8057-04afd34a6ea0.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="divider-tag">— O / ALTERNATIVA —</div>
+     <h4 class="font-bold text-[#f7f8f2] text-sm mt-2">Press de Hombro en Máquina</h4>
+     <div class="video-container">
+      <video autoplay loop muted playsinline webkit-playsinline preload="auto">
+       <source src="https://api.smartworkout.app/asset/video/2d1009a6-6a5b-402b-97ff-f30cb3677cce.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="bg-[#34484e] p-4 rounded-xl text-[#b7c0b4] text-sm leading-relaxed space-y-2 mt-4">
+      <p class="font-bold text-[#f7f8f2]">Claves del ejercicio:</p>
+      <p>1. Siéntate derecho con la espalda firme.</p>
+      <p>2. Empuja la carga hacia arriba sin bloquear los codos.</p>
+      <p>3. Baja controlado hasta la altura de las orejas.</p>
+     </div>
+    </main>
+    <footer class="pt-4"><button type="button" class="back-button nav-back" data-back="day-superior"><i data-lucide="arrow-left"></i> VOLVER A TREN SUPERIOR</button></footer>
+   </section>
+
+   <section id="ex-s-biceps" class="screen">
+    <header class="pb-2">
+     <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">TREN SUPERIOR</p>
+     <h2 class="mt-1 font-extrabold text-[#f7f8f2] text-2xl">Curl de bíceps</h2>
+     <span class="exercise-meta">3 series × 12 reps</span>
+    </header>
+    <main class="flex-1">
+     <div class="video-container">
+      <video autoplay loop muted playsinline webkit-playsinline preload="auto">
+       <source src="https://api.smartworkout.app/asset/video/279079ca-02fb-4775-ac1a-578138cfbdef.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="bg-[#34484e] p-4 rounded-xl text-[#b7c0b4] text-sm leading-relaxed space-y-2">
+      <p class="font-bold text-[#f7f8f2]">Claves del ejercicio:</p>
+      <p>1. Mantén los codos pegados al cuerpo en todo momento.</p>
+      <p>2. Sube la carga usando solo la fuerza de los brazos.</p>
+      <p>3. Baja controlado.</p>
+     </div>
+    </main>
+    <footer class="pt-4"><button type="button" class="back-button nav-back" data-back="day-superior"><i data-lucide="arrow-left"></i> VOLVER A TREN SUPERIOR</button></footer>
+   </section>
+
+   <section id="ex-s-triceps" class="screen">
+    <header class="pb-2">
+     <p class="eyebrow text-xs font-bold text-[#d6ff37] tracking-widest">TREN SUPERIOR</p>
+     <h2 class="mt-1 font-extrabold text-[#f7f8f2] text-2xl">Extensión de tríceps en polea</h2>
+     <span class="exercise-meta">3 series × 12 reps</span>
+    </header>
+    <main class="flex-1">
+     <div class="video-container">
+      <video autoplay loop muted playsinline webkit-playsinline preload="auto">
+       <source src="https://api.smartworkout.app/asset/video/8b06feb9-bf5c-4c77-a78e-9b00c1d78aa8.mp4" type="video/mp4">
+      </video>
+     </div>
+     <div class="bg-[#34484e] p-4 rounded-xl text-[#b7c0b4] text-sm leading-relaxed space-y-2">
+      <p class="font-bold text-[#f7f8f2]">Claves del ejercicio:</p>
+      <p>1. Sujeta la cuerda con los codos fijos a los lados.</p>
+      <p>2. Extiende los brazos hacia abajo sintiendo los tríceps.</p>
+      <p>3. Regresa a la posición inicial.</p>
+     </div>
+    </main>
+    <footer class="pt-4"><button type="button" class="back-button nav-back" data-back="day-superior"><i data-lucide="arrow-left"></i> VOLVER A TREN SUPERIOR</button></footer>
+   </section>
+
+  </div>
+
+  <!-- MODAL DE FELICITACIONES PERSONALIZADO -->
+  <div id="congrats-modal" class="modal-overlay">
+   <div class="modal-box">
+    <div class="text-4xl mb-2">🎉🏆</div>
+    <h3 class="text-xl font-extrabold text-[#d6ff37] mb-2">¡EXCELENTE MI INGE!</h3>
+    <p class="text-sm text-[#f7f8f2] mb-5">¡No esperaba menos de la más Fit! Sigue así</p>
+    <button type="button" id="close-modal-btn" class="primary-button w-full rounded-xl bg-[#d6ff37] py-3 font-bold text-[#111511]">¡GENIAL!</button>
+   </div>
+  </div>
+
+  <script>
+    // AUDIO DE CELEBRACIÓN
+    const celebrationAudio = new Audio("https://raw.githubusercontent.com/Yei9311/GYM_JENN/main/CELEBRACION.mp3");
+
+    function showScreen(id) {
+      document.querySelectorAll("video[controls]").forEach(function(vid) {
+        vid.pause();
+        vid.currentTime = 0;
+      });
+
+      document.querySelectorAll(".screen").forEach(function(screen) {
+        screen.classList.toggle("active", screen.id === id);
+      });
+
+      const targetScreen = document.getElementById(id);
+      if (targetScreen) {
+        targetScreen.querySelectorAll("video[autoplay]").forEach(function(vid) {
+          vid.currentTime = 0;
+          vid.play().catch(function(e) { console.log(e); });
+        });
+      }
+
+      document.querySelector(".app-shell").scrollTop = 0;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.getElementById("start-button").addEventListener("click", function() {
+      showScreen("menu");
+    });
+
+    document.querySelectorAll(".menu-image-card, .exercise-card").forEach(function(button) {
+      button.addEventListener("click", function(e) {
+        if (e.target.closest('.check-box')) return;
+        if (button.dataset.target) {
+          showScreen(button.dataset.target);
+        }
+      });
+    });
+
+    document.querySelectorAll(".back-to-menu").forEach(function(button) {
+      button.addEventListener("click", function() {
+        showScreen("menu");
+      });
+    });
+
+    document.querySelectorAll(".nav-back").forEach(function(button) {
+      button.addEventListener("click", function() {
+        showScreen(button.dataset.back);
+      });
+    });
+
+    // USO DE SESSION STORAGE: Se borra automáticamente al cerrar la pestaña o la app
+    let completedEx = JSON.parse(sessionStorage.getItem("gym_jenn_progress_session") || "{}");
+
+    function toggleCheck(event, id) {
+      event.stopPropagation();
+      completedEx[id] = !completedEx[id];
+      sessionStorage.setItem("gym_jenn_progress_session", JSON.stringify(completedEx));
+      updateUI();
+    }
+
+    function updateUI() {
+      document.querySelectorAll(".exercise-card[data-ex-id]").forEach(card => {
+        const id = card.dataset.exId;
+        const checkIcon = card.querySelector(".check-box svg");
+        if (completedEx[id]) {
+          card.classList.add("completed");
+          if (checkIcon) checkIcon.classList.remove("hidden");
+        } else {
+          card.classList.remove("completed");
+          if (checkIcon) checkIcon.classList.add("hidden");
+        }
+      });
+
+      document.querySelectorAll("section[data-day]").forEach(daySection => {
+        const cards = daySection.querySelectorAll(".exercise-card[data-ex-id]");
+        let count = 0;
+        cards.forEach(card => {
+          if (completedEx[card.dataset.exId]) count++;
+        });
+        const total = cards.length;
+        const percent = Math.round((count / total) * 100);
+
+        const progressText = daySection.querySelector(".progress-text");
+        const progressBarFill = daySection.querySelector(".progress-bar-fill");
+
+        if (progressText) progressText.textContent = `${count}/${total} (${percent}%)`;
+        if (progressBarFill) progressBarFill.style.width = `${percent}%`;
+
+        if (count === total && total > 0 && !daySection.dataset.celebrated) {
+          daySection.dataset.celebrated = "true";
+          document.getElementById("congrats-modal").classList.add("active");
+          celebrationAudio.currentTime = 0;
+          celebrationAudio.play().catch(e => console.log("Audio de celebración bloqueado sin interacción previa"));
+        } else if (count < total) {
+          delete daySection.dataset.celebrated;
+        }
+      });
+    }
+
+    document.getElementById("close-modal-btn").addEventListener("click", function() {
+      document.getElementById("congrats-modal").classList.remove("active");
+      celebrationAudio.pause();
+    });
+
+    updateUI();
+    lucide.createIcons();
+  </script>
+</body>
+</html>
